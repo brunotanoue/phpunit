@@ -29,7 +29,7 @@ pipeline {
           steps {
             script  {
               try {
-                sh './vendor/bin/phpunit -c phpunit-br.xml --log-junit report.xml --coverage-clover clover.xml --coverage-html coverage'
+                sh './phpunit -c phpunit-br.xml --log-junit report.xml --coverage-clover clover.xml --coverage-html coverage'
               } catch (err) {
                   echo "Identificado: ${err}"
                   currentBuild.result = 'failure'
