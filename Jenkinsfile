@@ -37,6 +37,27 @@ pipeline {
             }
           }
         }
+        stage('Junit Report') {
+          steps {
+            junit "report.xml"
+          }
+        }
+        stage('Clover') {
+            steps{
+                step([$class: 'CloverPublisher', cloverReportDir: '', cloverReportFileName: 'clover.xml'])
+            }
+        }
+        stage('Html Publish') {
+            steps{
+                 publishHTML (target: [
+                    allowMissing: true,
+                    alwaysLinkToLastBuild: false,
+                    keepAll: true,
+                    reportDir: '',
+                    reportFiles: 'coverage',
+                    reportName: "Coverage Report"
+            ])
+        }        
         stage('Deploy') {
             steps {
                 echo 'Deploy project...'
