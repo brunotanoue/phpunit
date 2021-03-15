@@ -58,7 +58,7 @@ pipeline {
                     reportName: "Coverage Report"
             ])}
         }
-        stage ("Extract test results") {
+        stage("Extract test results") {
             cobertura coberturaReportFile: 'report.xml'
         }
         stage('Deploy') {
