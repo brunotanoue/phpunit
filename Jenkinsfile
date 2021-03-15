@@ -56,8 +56,8 @@ pipeline {
                     reportDir: '',
                     reportFiles: 'coverage',
                     reportName: "Coverage Report"
-            ])
-        }        
+            ])}
+        }
         stage('Deploy') {
             steps {
                 echo 'Deploy project...'
