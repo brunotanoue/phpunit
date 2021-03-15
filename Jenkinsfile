@@ -29,7 +29,7 @@ pipeline {
           steps {
             script  {
               try {
-                sh './vendor/bin/phpunit'
+                sh './phpunit'
               } catch (err) {
                   echo "Identificado: ${err}"
                   currentBuild.result = 'failure'
