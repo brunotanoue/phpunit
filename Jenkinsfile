@@ -55,6 +55,7 @@ pipeline {
     }
     post {
         always {
+            echo BUILD_URL
             influxDbPublisher(selectedTarget: 'TestDB', customData: assignURL(BUILD_URL))
         }
     }
