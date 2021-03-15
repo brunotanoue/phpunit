@@ -10,15 +10,32 @@ pipeline {
     }
 
     stages {
+        stage ('Checkout') {
+          steps {
+            checkout scm
+          }
+        }
+        stage('Configurando dependências por pastas') {
+          steps {
+            sh 'composer install --no-scripts'
+          }
+        }
         stage('Build') {
             steps {
                 echo 'Building project...'
             }
         }
         stage('Test') {
-            steps {
-                echo 'Running tests...'
+          steps {
+            script  {
+              try {
+                sh './vendor/bin/phpunit'
+              } catch (err) {
+                  echo "Identificado: ${err}"
+                  currentBuild.result = 'failure'
+              }
             }
+          }
         }
         stage('Deploy') {
             steps {
