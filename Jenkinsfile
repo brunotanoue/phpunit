@@ -59,7 +59,9 @@ pipeline {
             ])}
         }
         stage("Extract test results") {
-            cobertura coberturaReportFile: 'report.xml'
+            steps{
+              cobertura coberturaReportFile: 'report.xml'
+            }
         }
         stage('Deploy') {
             steps {
