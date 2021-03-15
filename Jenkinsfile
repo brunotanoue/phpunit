@@ -29,7 +29,7 @@ pipeline {
           steps {
             script  {
               try {
-                sh './phpunit --log-junit report.xml --coverage-clover clover.xml --coverage-html coverage'
+                sh './vendor/bin/phpunit -c phpunit-br.xml --log-junit report.xml --coverage-clover clover.xml --coverage-html coverage'
               } catch (err) {
                   echo "Identificado: ${err}"
                   currentBuild.result = 'failure'
@@ -37,39 +37,18 @@ pipeline {
             }
           }
         }
-        stage('Junit Report') {
-          steps {
-            junit "report.xml"
-          }
-        }
-        stage('Clover') {
-            steps{
-                step([$class: 'CloverPublisher', cloverReportDir: '', cloverReportFileName: 'clover.xml'])
-            }
-        }
-        stage('Html Publish') {
-            steps{
-                 publishHTML (target: [
-                    allowMissing: true,
-                    alwaysLinkToLastBuild: false,
-                    keepAll: true,
-                    reportDir: '',
-                    reportFiles: 'coverage',
-                    reportName: "Coverage Report"
-            ])
-        }
         stage('Deploy') {
             steps {
                 echo 'Deploy project...'
             }
         }
-        }
-        post {
-            always {
-                influxDbPublisher(selectedTarget: 'TestDB', customData: assignURL(BUILD_URL))
-            }
+    }
+    post {
+        always {
+            influxDbPublisher(selectedTarget: 'TestDB', customData: assignURL(BUILD_URL))
         }
     }
+}
 
 def assignURL(build_url) {
     def buildURL = [:]
