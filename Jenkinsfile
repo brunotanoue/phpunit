@@ -29,7 +29,7 @@ pipeline {
           steps {
             script  {
               try {
-                sh './phpunit --log-junit report.xml --coverage-clover clover.xml --coverage-html coverage'
+                sh './phpunit --log-junit report.xml --coverage-clover clover.xml --coverage-html coverage --whitelist src/'
               } catch (err) {
                   echo "Identificado: ${err}"
                   currentBuild.result = 'failure'
@@ -46,6 +46,17 @@ pipeline {
             steps{
                 step([$class: 'CloverPublisher', cloverReportDir: '', cloverReportFileName: 'clover.xml'])
             }
+        }
+        stage('Html Publish') {
+            steps{
+                 publishHTML (target: [
+                    allowMissing: true,
+                    alwaysLinkToLastBuild: false,
+                    keepAll: true,
+                    reportDir: '',
+                    reportFiles: 'coverage',
+                    reportName: "Coverage Report"
+            ])}
         }
         stage('Deploy') {
             steps {
