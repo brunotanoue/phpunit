@@ -58,6 +58,9 @@ pipeline {
                     reportName: "Coverage Report"
             ])}
         }
+        stage ("Extract test results") {
+            cobertura coberturaReportFile: 'report.xml'
+        }
         stage('Deploy') {
             steps {
                 echo 'Deploy project...'
@@ -66,7 +69,6 @@ pipeline {
     }
     post {
         always {
-            step([$class: 'CoberturaPublisher', autoUpdateHealth: false, autoUpdateStability: false, coberturaReportFile: 'clover.xml', failUnhealthy: false, failUnstable: false, maxNumberOfBuilds: 0, onlyStable: false, sourceEncoding: 'ASCII', zoomCoverageChart: false])        
             echo BUILD_URL
             influxDbPublisher(selectedTarget: 'TestDB', customData: assignURL(BUILD_URL))
         }
