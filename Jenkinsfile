@@ -44,7 +44,7 @@ pipeline {
         }
         stage('Clover') {
             steps{
-                step([$class: 'CloverPublisher', cloverReportDir: '', cloverReportFileName: 'reports/coverage/clover.xml'])
+                step([$class: 'CloverPublisher', cloverReportDir: 'reports/coverage/', cloverReportFileName: 'clover.xml'])
             }
         }
         stage('Html Publish') {
