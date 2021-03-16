@@ -29,7 +29,7 @@ pipeline {
           steps {
             script  {
               try {
-                sh './phpunit --log-junit reports/report.xml --coverage-clover reports/coverage/clover.xml --coverage-html reports/coverage'
+                sh './phpunit --log-junit report.xml --coverage-clover clover.xml --coverage-html coverage'
               } catch (err) {
                   echo "Identificado: ${err}"
                   currentBuild.result = 'failure'
@@ -44,7 +44,7 @@ pipeline {
         }
         stage('Clover') {
             steps{
-                step([$class: 'CloverPublisher', cloverReportDir: 'reports/coverage/', cloverReportFileName: 'clover.xml'])
+                step([$class: 'CloverPublisher', cloverReportDir: '', cloverReportFileName: 'clover.xml'])
             }
         }
         stage('Html Publish') {
@@ -53,14 +53,14 @@ pipeline {
                     allowMissing: true,
                     alwaysLinkToLastBuild: false,
                     keepAll: true,
-                    reportDir: 'reports/coverage',
+                    reportDir: 'coverage',
                     reportFiles: 'index.html',
                     reportName: "Coverage Report"
             ])}
         }
         stage("Extract test results") {
             steps{
-              step([$class: 'CoberturaPublisher', autoUpdateHealth: false, autoUpdateStability: false, coberturaReportFile: 'reports/coverage/clover.xml', failUnhealthy: false, failUnstable: false, maxNumberOfBuilds: 0, onlyStable: false, sourceEncoding: 'ASCII', zoomCoverageChart: false])
+              step([$class: 'CoberturaPublisher', autoUpdateHealth: false, autoUpdateStability: false, coberturaReportFile: 'clover.xml', failUnhealthy: false, failUnstable: false, maxNumberOfBuilds: 0, onlyStable: false, sourceEncoding: 'ASCII', zoomCoverageChart: false])
             }
         }
         stage('Deploy') {
